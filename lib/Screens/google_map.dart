@@ -33,6 +33,7 @@ class _MapScreenState extends State<MapScreen> {
       Updatelocation = LatLng(location.latitude!, location.longitude!);
       print(Updatelocation);
       polylinesco.add(Updatelocation);
+      location_time_update();
       if(mounted){
         setState(() {});
       }
@@ -42,6 +43,17 @@ class _MapScreenState extends State<MapScreen> {
   void _onMapCreated(GoogleMapController controller) {
     _mapController = controller;
     _mapController!.animateCamera(CameraUpdate.newLatLng(inilocation));
+
+  }
+
+  void location_time_update() async{
+    if(await location.serviceEnabled()){
+      location.changeSettings(
+          interval: 10000
+      );
+    }else{
+      location.requestPermission();
+    }
 
   }
 
@@ -100,7 +112,7 @@ class _MapScreenState extends State<MapScreen> {
             circleId: CircleId('circle_1'),
             center: Updatelocation,
             fillColor: Colors.blue.shade100,
-            radius: 300,
+            radius: 180,
             strokeColor:Colors.blue.shade100
           )
       },
